@@ -1,0 +1,18 @@
+type Gift @model @auth(rules: [{ allow: private }]) {
+  id: ID!
+  user: User! @connection(name: "UserGifts", sortField: "rating")
+  name: String!
+  description: String
+  rating: Int!
+  price: Float
+  url: String
+  claimUser: User @connection(name: "UserClaimedGifts", sortField: "claimedAt")
+  claimedAt: String
+}
+
+type User @model @auth(rules: [{ allow: private }]) {
+  id: ID!
+  name: String!
+  gifts: [Gift] @connection(name: "UserGifts", sortField: "rating")
+  claimedGifts: [Gift] @connection(name: "UserClaimedGifts", sortField: "claimedAt")
+}

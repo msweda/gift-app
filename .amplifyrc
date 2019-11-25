@@ -1,0 +1,14 @@
+{
+    "providers": {
+        "awscloudformation": {
+            "AuthRoleName": "giftapp-20191117101825-authRole",
+            "UnauthRoleArn": "arn:aws:iam::718716022934:role/giftapp-20191117101825-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::718716022934:role/giftapp-20191117101825-authRole",
+            "Region": "us-east-1",
+            "DeploymentBucketName": "giftapp-20191117101825-deployment",
+            "UnauthRoleName": "giftapp-20191117101825-unauthRole",
+            "StackName": "giftapp-20191117101825",
+            "StackId": "arn:aws:cloudformation:us-east-1:718716022934:stack/giftapp-20191117101825/805e58e0-094d-11ea-895c-0ed2247e0ea9"
+        }
+    }
+}
