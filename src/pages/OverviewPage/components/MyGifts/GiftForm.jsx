@@ -7,8 +7,9 @@ import Input from 'components/Input';
 import TextArea from 'components/TextArea';
 import Button from 'components/Button';
 import ErrorMessage from 'components/ErrorMessage';
-import Select from 'components/Select';
 import Rating from 'components/Rating';
+import { MetroSpinner } from 'react-spinners-kit';
+import { Color } from 'theme';
 
 const Form = styled.form`
   display: flex;
@@ -49,7 +50,38 @@ const FieldGroupField = styled(Field)`
   }
 `;
 
-const GiftForm = ({ initialValues, onSubmit, submitButtonText }) => {
+const StyledRating = styled(Rating)`
+  padding-top: 0.65rem;
+  padding-bottom: 0.65rem;
+`;
+
+const Buttons = styled.div`
+  display: flex;
+  ${props => props.theme.Media[props.theme.Device.MOBILE]} {
+    flex-direction: column;
+  }
+  ${props => props.theme.mediaGte(props.theme.Device.TABLET)} {
+    align-items: center;
+  }
+  ${Button} {
+    flex-grow: 1;
+  }
+`;
+
+const GiftForm = ({
+  cancelButtonText,
+  initialValues,
+  isSubmitting,
+  onCancel,
+  onSubmit,
+  submitButtonText,
+  submitError,
+}) => {
+  const handleCancel = e => {
+    e.preventDefault();
+    e.stopPropagation();
+    onCancel();
+  };
   const formik = useFormik({
     initialValues: {
       rating: 3,
@@ -79,19 +111,12 @@ const GiftForm = ({ initialValues, onSubmit, submitButtonText }) => {
         <FieldGroup>
           <FieldGroupField>
             <Label htmlFor="gift-form-rating">Rating</Label>
-            <Rating
+            <StyledRating
               id="gift-form-rating"
               isEditable={true}
               onChange={value => formik.setFieldValue('rating', value)}
               value={formik.values.rating}
             />
-            {/* <Select id="gift-form-rating" name="rating" onChange={formik.handleChange} value={formik.values.rating}>
-              <option value={1}>{`1 - Here's an idea`}</option>
-              <option value={2}>{`2 - I could use this`}</option>
-              <option value={3}>{`3 - I would like this`}</option>
-              <option value={4}>{`4 - I would love this`}</option>
-              <option value={5}>{`5 - I gotta have this`}</option>
-            </Select> */}
           </FieldGroupField>
           <FieldGroupField>
             <Label htmlFor="gift-form-price">Price ($)</Label>
@@ -122,18 +147,35 @@ const GiftForm = ({ initialValues, onSubmit, submitButtonText }) => {
         </Field>
       </Fields>
 
-      <Button type="submit">{submitButtonText}</Button>
+      {isSubmitting ? (
+        <MetroSpinner color={Color.HEART_RED} />
+      ) : (
+        <>
+          {submitError && <ErrorMessage>{submitError.message}</ErrorMessage>}
+          <Buttons>
+            <Button type="submit">{submitButtonText}</Button>
+            <Button onClick={handleCancel} variant="secondary">
+              {cancelButtonText}
+            </Button>
+          </Buttons>
+        </>
+      )}
     </Form>
   );
 };
 
 GiftForm.propTypes = {
+  cancelButtonText: PropTypes.string,
   initialValues: PropTypes.object,
+  isSubmitting: PropTypes.bool,
+  onCancel: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
   submitButtonText: PropTypes.string,
+  submitError: PropTypes.object,
 };
 
 GiftForm.defaultProps = {
+  cancelButtonText: 'Cancel',
   submitButtonText: 'Submit',
 };
 

@@ -2,9 +2,10 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import GiftForm from './GiftForm';
-import Button from 'components/Button';
 import IconButton from 'components/IconButton';
 import Rating from 'components/Rating';
+import RemoveGift from './RemoveGift';
+import GiftContainer from 'containers/GiftContainer';
 
 const Container = styled.div`
   display: flex;
@@ -27,12 +28,32 @@ const Price = styled.p``;
 
 const Description = styled.p``;
 
-const Url = styled.a``;
+const Url = styled.a`
+  word-break: break-word;
+`;
 
-const Gift = ({ className, description, name, price, rating, url }) => {
+const Gift = ({ className, description, giftId, name, price, rating, url }) => {
   const [isEditing, setIsEditing] = useState(false);
   const toggleIsEditing = () => {
     setIsEditing(!isEditing);
+  };
+
+  const [isDeleting, setIsDeleting] = useState(false);
+  const toggleIsDeleting = () => {
+    setIsDeleting(!isDeleting);
+  };
+
+  const giftContainer = GiftContainer.useContainer();
+  const { editedGift, editGift, removedGift, removeGift } = giftContainer;
+
+  const handleEditGift = async values => {
+    await editGift({ ...values, id: giftId });
+    toggleIsEditing();
+  };
+
+  const handleRemoveGift = async () => {
+    await removeGift({ id: giftId });
+    toggleIsDeleting();
   };
 
   const content = () => {
@@ -45,20 +66,37 @@ const Gift = ({ className, description, name, price, rating, url }) => {
         url,
       };
       return (
-        <>
-          <GiftForm className={className} initialValues={initialValues} submitButtonText="Save Changes" />{' '}
-          <Button onClick={toggleIsEditing} variant="secondary">
-            Discard Changes
-          </Button>
-        </>
+        <GiftForm
+          cancelButtonText="Discard Changes"
+          className={className}
+          initialValues={initialValues}
+          isSubmitting={editedGift.loading}
+          onCancel={toggleIsEditing}
+          onSubmit={handleEditGift}
+          submitButtonText="Save Changes"
+          submitError={editedGift.error}
+        />
       );
     }
-    // const ratingText =
+    if (isDeleting) {
+      return (
+        <RemoveGift
+          giftName={name}
+          isSubmitting={removedGift.loading}
+          onCancel={toggleIsDeleting}
+          onSubmit={handleRemoveGift}
+          submitError={removedGift.error}
+        />
+      );
+    }
     return (
       <>
         <Row>
           <Name>{name}</Name>
           <IconButton onClick={toggleIsEditing}>✎</IconButton>
+          <IconButton onClick={toggleIsDeleting} variant="secondary">
+            ✕
+          </IconButton>
         </Row>
         <Row>
           <Rating value={rating} />
@@ -78,6 +116,7 @@ const Gift = ({ className, description, name, price, rating, url }) => {
 Gift.propTypes = {
   className: PropTypes.string,
   description: PropTypes.string,
+  giftId: PropTypes.string.isRequired,
   isEditing: PropTypes.bool,
   name: PropTypes.string.isRequired,
   price: PropTypes.number,

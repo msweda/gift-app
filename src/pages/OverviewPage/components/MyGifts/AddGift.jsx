@@ -8,16 +8,13 @@ import GiftContainer from 'containers/GiftContainer';
 const Container = styled.div`
   display: flex;
   flex-direction: column;
+  padding: ${props => props.theme.spacing(3)};
 `;
 
 const StyledButton = styled(Button)``;
 
-const StatusText = styled.p`
-  padding: ${props => props.theme.spacing(1)};
-`;
-
-const AddingHeading = styled.p`
-  padding: ${props => props.theme.spacing(1)};
+const AddingHeading = styled.h3`
+  padding: ${props => props.theme.spacing(2)};
 `;
 
 const AddGift = ({ className }) => {
@@ -28,7 +25,7 @@ const AddGift = ({ className }) => {
 
   const giftContainer = GiftContainer.useContainer();
   const {
-    addedGift: { data, error, loading },
+    addedGift: { error, loading },
     addGift,
   } = giftContainer;
 
@@ -41,17 +38,17 @@ const AddGift = ({ className }) => {
     if (!isAdding) {
       return <StyledButton onClick={toggleIsAdding}>Add New Gift</StyledButton>;
     }
-    if (loading) {
-      return <StatusText>Loading...</StatusText>;
-    }
-    if (error) return <StatusText>Error - Unable to add gift</StatusText>;
     return (
       <>
         <AddingHeading>Describe Your New Gift:</AddingHeading>
-        <GiftForm onSubmit={handleSubmitGiftForm} submitButtonText="Add New Gift" />
-        <Button variant="secondary" onClick={toggleIsAdding}>
-          Discard New Gift
-        </Button>
+        <GiftForm
+          cancelButtonText="Discard New Gift"
+          isSubmitting={loading}
+          onCancel={toggleIsAdding}
+          onSubmit={handleSubmitGiftForm}
+          submitButtonText="Add New Gift"
+          submitError={error}
+        />
       </>
     );
   };

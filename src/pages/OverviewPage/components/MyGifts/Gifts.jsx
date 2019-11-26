@@ -49,7 +49,17 @@ const Gifts = ({ className }) => {
     }
     return data.map(gift => {
       const { description, id, name, price, rating, url } = gift;
-      return <StyledGift key={id} description={description} name={name} price={price} rating={rating} url={url} />;
+      return (
+        <StyledGift
+          key={id}
+          giftId={id}
+          description={description}
+          name={name}
+          price={price}
+          rating={rating}
+          url={url}
+        />
+      );
     });
   };
 

@@ -4,6 +4,7 @@ const BORDER_SIZE = '2px';
 const Color = {
   EBONY_CLAY: '#232f3e',
   GALLERY: '#eeeeee',
+  HEART_RED: '#a83f39',
   KOROMIKO: '#ffc46d',
   ORANGE_PEEL: '#ff9900',
   PICKLED_BLUEWOOD: '#35475e',
