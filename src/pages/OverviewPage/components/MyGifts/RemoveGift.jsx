@@ -8,7 +8,9 @@ import ErrorMessage from 'components/ErrorMessage';
 
 const Container = styled.div``;
 
-const DeleteConfirmationText = styled.p``;
+const DeleteConfirmationText = styled.p`
+  margin-bottom: ${props => props.theme.spacing(1)};
+`;
 
 const Buttons = styled.div`
   display: flex;
@@ -30,7 +32,7 @@ const RemoveGift = ({ className, giftName, isSubmitting, onCancel, onSubmit, sub
     }
     return (
       <>
-        <DeleteConfirmationText>Remove {giftName}?</DeleteConfirmationText>
+        <DeleteConfirmationText>{`Remove "${giftName}?"`}</DeleteConfirmationText>
         <Buttons>
           <Button onClick={onSubmit}>Yes</Button>
           <Button onClick={onCancel} variant="secondary">
