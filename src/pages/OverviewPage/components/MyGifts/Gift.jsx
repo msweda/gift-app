@@ -30,6 +30,10 @@ const Description = styled.p``;
 
 const Url = styled.a`
   word-break: break-word;
+  text-decoration: underline;
+  &:hover {
+    color: ${props => props.theme.Color.HEART_RED};
+  }
 `;
 
 const Gift = ({ className, description, giftId, name, price, rating, url }) => {
@@ -104,7 +108,7 @@ const Gift = ({ className, description, giftId, name, price, rating, url }) => {
         </Row>
         <Description>{description}</Description>
         <Url href={url} target="_blank">
-          {url}
+          🔗Click For Link
         </Url>
       </>
     );
