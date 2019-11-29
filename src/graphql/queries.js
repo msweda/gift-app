@@ -73,6 +73,10 @@ export const getUser = `query GetUser($id: ID!) {
         price
         url
         claimedAt
+        claimUser {
+          id
+          name
+        }
       }
       nextToken
     }

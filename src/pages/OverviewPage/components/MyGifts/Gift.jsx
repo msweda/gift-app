@@ -107,9 +107,11 @@ const Gift = ({ className, description, giftId, name, price, rating, url }) => {
           <Price>${price}</Price>
         </Row>
         <Description>{description}</Description>
-        <Url href={url} target="_blank">
-          🔗Click For Link
-        </Url>
+        {url && (
+          <Url href={url} target="_blank">
+            🔗Click For Link
+          </Url>
+        )}
       </>
     );
   };

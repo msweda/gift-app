@@ -15,6 +15,11 @@ const defaultState = {
     error: undefined,
     loading: false,
   },
+  otherUser: {
+    data: undefined,
+    error: undefined,
+    loading: false,
+  },
 };
 
 const MyUserReducerType = {
@@ -76,6 +81,37 @@ const usersReducer = (state, action) => {
       };
     default:
       throw new Error('UsersContainer - usersReducer received unknown action');
+  }
+};
+
+const OtherUserReducerType = {
+  FETCH_OTHER_USER_REQUEST: 'FETCH_OTHER_USER_REQUEST',
+  FETCH_OTHER_USER_SUCCESS: 'FETCH_OTHER_USER_SUCCESS',
+  FETCH_OTHER_USER_FAILURE: 'FETCH_OTHER_USER_FAILURE',
+};
+
+const otherUserReducer = (state, action) => {
+  switch (action.type) {
+    case OtherUserReducerType.FETCH_OTHER_USER_REQUEST:
+      return {
+        ...state,
+        error: defaultState.users.error,
+        loading: true,
+      };
+    case OtherUserReducerType.FETCH_OTHER_USER_SUCCESS:
+      return {
+        ...state,
+        data: action.data,
+        loading: false,
+      };
+    case OtherUserReducerType.FETCH_OTHER_USER_FAILURE:
+      return {
+        ...state,
+        error: action.error,
+        loading: false,
+      };
+    default:
+      throw new Error('UsersContainer - otherUserReducer received unknown action');
   }
 };
 
@@ -141,7 +177,30 @@ const useUsersContainer = (initialState = defaultState) => {
     }
   };
 
-  return { fetchMyUser, fetchUsers, myUser, users };
+  const [otherUser, otherUserDispatch] = useReducer(otherUserReducer, initialState.otherUser);
+  const fetchOtherUser = async (userId, config = {}) => {
+    otherUserDispatch({
+      type: OtherUserReducerType.FETCH_OTHER_USER_REQUEST,
+    });
+    try {
+      const response = await API.graphql(
+        graphqlOperation(getUser, {
+          id: userId,
+        }),
+      );
+      otherUserDispatch({
+        type: OtherUserReducerType.FETCH_OTHER_USER_SUCCESS,
+        data: response.data.getUser,
+      });
+    } catch (e) {
+      otherUserDispatch({
+        type: OtherUserReducerType.FETCH_OTHER_USER_FAILURE,
+        error: e,
+      });
+    }
+  };
+
+  return { fetchMyUser, fetchOtherUser, fetchUsers, myUser, otherUser, users };
 };
 
 const UsersContainer = createContainer(useUsersContainer);

@@ -88,7 +88,12 @@ const GiftForm = ({
       ...initialValues,
     },
     onSubmit: values => {
-      onSubmit(values);
+      const formattedValues = {};
+      for (let [key, value] of Object.entries(values)) {
+        // Format empty strings as null.
+        formattedValues[key] = value !== '' ? value : null;
+      }
+      onSubmit(formattedValues);
     },
     validate: values => {
       const errors = {};
