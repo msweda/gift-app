@@ -1,6 +1,29 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
+export const giftsForUser = `query GiftsForUser($userId: ID!, $limit: Int, $nextToken: String) {
+  giftsForUser(userId: $userId, limit: $limit, nextToken: $nextToken) {
+    items {
+      id
+      user {
+        id
+        name
+      }
+      name
+      description
+      rating
+      price
+      url
+      claimUser {
+        id
+        name
+      }
+      claimedAt
+    }
+    nextToken
+  }
+}
+`;
 export const getGift = `query GetGift($id: ID!) {
   getGift(id: $id) {
     id
@@ -73,10 +96,6 @@ export const getUser = `query GetUser($id: ID!) {
         price
         url
         claimedAt
-        claimUser {
-          id
-          name
-        }
       }
       nextToken
     }

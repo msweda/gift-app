@@ -7,7 +7,7 @@ type Gift @model @auth(rules: [{ allow: private }]) {
   price: Float
   url: String
   claimUser: User @connection(name: "UserClaimedGifts", sortField: "claimedAt")
-  claimedAt: String
+  claimedAt: AWSDateTime
 }
 
 type User @model @auth(rules: [{ allow: private }]) {
@@ -15,4 +15,26 @@ type User @model @auth(rules: [{ allow: private }]) {
   name: String!
   gifts: [Gift] @connection(name: "UserGifts", sortField: "rating")
   claimedGifts: [Gift] @connection(name: "UserClaimedGifts", sortField: "claimedAt")
+}
+
+type GiftConnection {
+  items: [Gift]
+  nextToken: String
+}
+
+type Query {
+  giftsForUser(userId: ID!, limit: Int, nextToken: String): GiftConnection
+}
+
+input ClaimGiftInput {
+  id: ID!
+}
+
+input UnclaimGiftInput {
+  id: ID!
+}
+
+type Mutation {
+  claimGift(input: ClaimGiftInput!): Gift
+  unclaimGift(input: UnclaimGiftInput!): Gift
 }
