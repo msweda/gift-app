@@ -11,6 +11,7 @@ const useGiftsContainer = () => {
       giftsForUser,
       {
         userId,
+        limit: 100,
       },
       response => response.data.giftsForUser.items,
     );
@@ -28,7 +29,6 @@ const useGiftsContainer = () => {
       },
       response => response.data.claimGift,
     );
-    // TODO update gifts.
   };
   const claimedGift = claimedGiftAPI.response;
 
